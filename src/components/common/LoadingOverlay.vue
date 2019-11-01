@@ -8,9 +8,16 @@
 <script>
   export default {
     name: "LoadingOverlay",
+    props:{
+      on: {
+        type: Boolean,
+        default: true
+      }
+    }
+    ,
     data() {
       return {
-        show: true
+        show: this.on
       }
     },
     methods: {

@@ -1,7 +1,4 @@
 export default {
-    setSearch(state, isSearch){
-        state.isSearch= isSearch;
-    },
     setUserRecord(state, userRecord){
         state.userRecord = userRecord;
     },
@@ -17,13 +14,7 @@ export default {
     setSpellData(state, spellData){
         state.spellData = spellData
     },
-    setLoaidng(state, isLoading){
-        state.isLoading = isLoading
-    },
     setMatchDataIndex(state, matchDataIndex){
         state.matchDataIndex = matchDataIndex
     },
-    setAccountId(state, accountId){
-        state.accountID = accountId;
-    }
 }

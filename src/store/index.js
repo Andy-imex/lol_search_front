@@ -6,8 +6,6 @@ import mutations from './mutations'
 Vue.use(Vuex);
 
 const state = {
-    isSearch: false,
-    isLoading:true,
     userInfo:'',
     userRecord:'',
     userMatchList:[],
@@ -16,7 +14,7 @@ const state = {
     matchDataIndex:0,
     accountId:'',
     morePlusNum:5
-}
+};
 
 export default new Vuex.Store({
     state,

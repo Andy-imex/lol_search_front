@@ -83,15 +83,6 @@
         else resultTimeToKr = elapsedTime + "시간 전";
         return resultTimeToKr
       },
-      getMatchPlayerNames() {
-        const participantIdentities = this.matchData.participantIdentities;
-        let summonerNames = "";
-        for (var num in participantIdentities) {
-          summonerNames += participantIdentities[num].player.summonerName + " - ";
-          summonerNames += this.$store.state.championData[this.matchData.participants[num].championId].name + " , ";
-        }
-        return summonerNames
-      },
       getUserInfo() {
         return this.$store.state.userInfo
       },
@@ -114,9 +105,6 @@
       this.getUserMatchData()
     },
     methods: {
-      getChampionName(number) {
-        return this.$store.state.championData[number].name
-      },
       getChampionImagePath(championid) {
         return `//opgg-static.akamaized.net/images/lol/champion/${this.$store.state.championData[championid].image.full}`
       },

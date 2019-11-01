@@ -1,5 +1,5 @@
 <template>
-  <b-media>
+  <b-media v-if="userInfo.name">
     <template v-slot:aside>
       <b-img :src="getIconImagePath" alt="아이콘이미지ㅣ" height="100" width="100"></b-img>
     </template>
@@ -54,15 +54,6 @@
 </script>
 
 <style scoped>
-  .userinfo {
-    margin-bottom: 15px;
-  }
-
-  .myname {
-    position: absolute;
-    top: 40px;
-    left: 130px;
-  }
 
   .myname p {
     font-size: 38px;

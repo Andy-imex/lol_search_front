@@ -6,34 +6,39 @@
     <b-container>
       <b-row align-h="center">
         <b-col md="8">
-          <search-input/>
+          <search-input
+              @complete="isCompleteChange"
+          />
         </b-col>
       </b-row>
-      <div v-if="this.$store.state.isSearch">
+      <div v-if="isComplete">
         <b-row class="userInfoContainer">
-          <search-user-info :userInfo="this.$store.state.userInfo"/>
+          <search-user-info
+              :userInfo="this.$store.state.userInfo"
+          />
         </b-row>
         <b-row align-h="center" class="userRecordContainer">
           <b-col>
-            <div :key="data.id" class="recordCard" v-for="data in userRecord">
+            <div :key="data.id" class="recordCard" v-for="data in userRecords">
               <search-record :userData="data"/>
             </div>
           </b-col>
           <b-col cols="8">
-            <b-spinner label="Spinning" v-if="!getIsLoading" variant="primary">
-            </b-spinner>
-            <div v-else>
-              <match-box :key="match.gameId" :matchData="match"
-                         v-for="match in this.$store.state.userMatchList"/>
-
-              <more-btn/>
+            <div>
+              <match-box :key="match.gameId"
+                         :matchData="match"
+                         v-for="match in this.$store.state.userMatchList"
+              />
+              <more-btn
+              />
             </div>
           </b-col>
         </b-row>
       </div>
     </b-container>
     <loading-overlay
-        v-if="isLoading"
+        :on="false"
+        ref="loadingOverlay"
     />
   </div>
 </template>
@@ -51,10 +56,10 @@
   export default {
     name: "MainPage",
     data: () => ({
-      userRecord: '',
+      userRecords: '',
       userInfo: '',
       matchList: '',
-      isLoading: false
+      isComplete: false
     }),
     components: {
       SearchInput,
@@ -67,20 +72,19 @@
     computed: {
       queueTypeSort() {
         const queueTypeArray = ["RANKED_SOLO_5x5", "RANKED_FLEX_SR", "RANKED_TFT"];
-        const storeInUserRecord = this.$store.state.userRecord;
+        const storeInUserRecord = this.$store.state.userRecords;
         let resultArray = [];
 
-        for (let num in queueTypeArray) {
-          const findIndex = storeInUserRecord.findIndex(i => i.queueType === queueTypeArray[num]);
+        for (let i in queueTypeArray) {
+          const findIndex = storeInUserRecord.findIndex(record => record.queueType === queueTypeArray[i]);
           if (typeof storeInUserRecord[findIndex] == "undefined") resultArray.push({
-            "queueType": queueTypeArray[num],
+            "queueType": queueTypeArray[i],
             "tier": "Unranked"
           });
           else resultArray.push(storeInUserRecord[findIndex])
         }
         return resultArray
       }
-
     },
     methods: {
       getChampionData() {
@@ -107,9 +111,15 @@
               alert(e + "에러가 발생하였습니다.")
             })
       },
-      getIsLoading() {
-        return this.$store.state.isLoading
+      isCompleteChange(bool) {
+        this.isComplete = bool;
+        this.loadingOverlayOnOff(!bool)
+      },
+      loadingOverlayOnOff(isOn) {
+        if (isOn) this.$refs.loadingOverlay.open();
+        else this.$refs.loadingOverlay.close()
       }
+
     },
     mounted() {
       this.getChampionData();
@@ -117,14 +127,10 @@
     },
     updated() {
       this.userInfo = this.$store.state.userInfo;
-      this.userRecord = this.queueTypeSort;
-      this.matchList = this.$store.state.userMatchList
-    },
-    watch:{
-        loadingCheck: ()=>{
-
-        }
+      this.userRecords = this.queueTypeSort;
+      this.matchList = this.$store.state.userMatchList;
     }
+
   }
 </script>
 

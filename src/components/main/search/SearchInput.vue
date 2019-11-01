@@ -16,7 +16,6 @@
     name: "SearchInput",
     data: () => ({
       searchValue: '',
-      LoadValue: '',
     }),
     computed: {},
     methods: {
@@ -25,9 +24,7 @@
        */
       searchSubmitHandler(e) {
         e.preventDefault();
-        //if (this.searchValue == this.LoadValue) return
-        this.LoadValue = this.searchValue;
-        this.$store.dispatch("searchStart", false);
+        this.$emit("complete", false);
         this.$store.dispatch("userMatchListInit");
         this.$store.dispatch("userMatchDataIndexAction", 0);
         this.getUserInfo();
@@ -50,18 +47,6 @@
             .then(res => {
               const store = this.$store;
               store.dispatch("userRecordSetAction", res.data);
-              store.dispatch("searchStart", true)
-            })
-            .catch((e) => {
-              this.errorHandler(e)
-            })
-      },
-      getMatchListData(accountId, beginIndex) {
-        const morePlusNum = this.$store.state.morePlusNum;
-        RiotApi().getMatchListDataByAccountIdAndBeginIndexAndEndIndex(accountId, (beginIndex + morePlusNum), beginIndex)
-            .then(res => {
-              for (var num in res.data.matches) this.getMatchData(res.data.matches[num].gameId);
-              this.$store.dispatch("userMatchDataIndexAction", beginIndex + morePlusNum)
             })
             .catch((e) => {
               this.errorHandler(e)
@@ -78,11 +63,24 @@
               this.errorHandler(e)
             })
       },
+      getMatchListData(accountId, beginIndex) {
+        const morePlusNum = this.$store.state.morePlusNum;
+        RiotApi().getMatchListDataByAccountIdAndBeginIndexAndEndIndex(accountId, (beginIndex + morePlusNum), beginIndex)
+            .then(res => {
+              for (let num in res.data.matches) this.getMatchData(res.data.matches[num].gameId);
+              this.$store.dispatch("userMatchDataIndexAction", beginIndex + morePlusNum);
+              this.$emit("complete", true);
+            })
+            .catch((e) => {
+              this.errorHandler(e)
+            })
+      },
       notSearchHandler() {
-        this.$store.dispatch("searchStart", false);
+        this.$emit("complete", true);
         alert("찾지 못하였습니다.");
       },
       errorHandler(e) {
+        this.$emit("complete", true);
         alert(e.response.data.error_msg)
       }
 

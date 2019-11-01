@@ -1,23 +1,38 @@
 <template>
-  <b-button @click="moreBtnClickHanlder"
-            class="moreBtn">
-    더 보기
-  </b-button>
+  <div>
+    <b-button @click="moreBtnClickHandler"
+              class="btn"
+              v-if="isComplete"
+    >
+      더 보기
+    </b-button>
+
+    <b-button class="btn"
+              v-else
+              variant="light"
+    >
+      <b-spinner label="Spinning" variant="success"></b-spinner>
+    </b-button>
+  </div>
 </template>
 
 <script>
   import RiotApi from '../../api/RiotApi'
 
   export default {
-    computed: {},
+    data() {
+      return {
+        isComplete: true
+      }
+    },
     methods: {
-      moreBtnClickHanlder() {
+      moreBtnClickHandler() {
         const store = this.$store.state;
+        this.isComplete = false;
         RiotApi().getMatchListDataByAccountIdAndBeginIndexAndEndIndex(store.userInfo.accountId, (store.matchDataIndex + store.morePlusNum), store.matchDataIndex)
             .then(res => {
               for (let num in res.data.matches) this.getMatchData(res.data.matches[num].gameId)
               this.$store.dispatch("userMatchDataIndexAction", store.matchDataIndex + store.morePlusNum)
-              this.$store.dispatch("isLoadingChangeAction", true)
             })
             .catch(e => {
               alert(e + "에러가 발생하였습니다.")
@@ -28,9 +43,8 @@
         RiotApi().getMatchDataByMatchId(matchId)
             .then(res => {
               const store = this.$store;
-              store.dispatch("searchStart", true)
-              store.dispatch("userMatchListPush", res.data)
-              store.dispatch("isLoadingChangeAction", false)
+              store.dispatch("userMatchListPush", res.data);
+              this.isComplete = true;
             })
             .catch(e => {
               alert(e + "에러가 발생하였습니다.")
@@ -40,8 +54,8 @@
   }
 </script>
 
-<style>
-  .moreBtn {
+<style scoped>
+  .btn {
     width: 100%;
   }
 </style>

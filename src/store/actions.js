@@ -1,13 +1,4 @@
 export default {
-    searchStart({commit}, payload){
-        commit('setSearch', payload)
-    },
-    userDataSetAction({commit}, payload){
-        const userRecord = payload;
-        const userInfo = payload.pop();
-        commit('setUserRecord', userRecord);
-        commit('setUserInfo', userInfo);
-    },
     userInfoSetAction({commit}, userInfo){
         commit('setUserInfo', userInfo);
     },
@@ -24,7 +15,7 @@ export default {
         commit("setMatchData", sortArray)   
     },
     userMatchListInit({commit}){
-        commit("setMatchData", new Array())
+        commit("setMatchData", [])
     },
     championDataSetAction({commit}, championData){
         commit("setChampionData", championData)   
@@ -32,14 +23,7 @@ export default {
     spellDataSetAction({commit}, spellData){
         commit("setSpellData", spellData)   
     },
-    isLoadingChangeAction({commit}, isLoading){
-        commit("setLoaidng", isLoading)
-    },
     userMatchDataIndexAction({commit}, matchDataIndex){
         commit("setMatchDataIndex", matchDataIndex)
-    },
-    setAccountIdAction({commit}, accountID){
-        commit("setAccountId", accountID)
     }
-    
 }
