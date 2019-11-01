@@ -1,0 +1,29 @@
+export default {
+    setSearch(state, isSearch){
+        state.isSearch= isSearch;
+    },
+    setUserRecord(state, userRecord){
+        state.userRecord = userRecord;
+    },
+    setUserInfo(state, userInfo){
+        state.userInfo = userInfo;
+    },
+    setMatchData(state, matchData){
+        state.userMatchList = matchData
+    },
+    setChampionData(state, championData){
+        state.championData = championData
+    },
+    setSpellData(state, spellData){
+        state.spellData = spellData
+    },
+    setLoaidng(state, isLoading){
+        state.isLoading = isLoading
+    },
+    setMatchDataIndex(state, matchDataIndex){
+        state.matchDataIndex = matchDataIndex
+    },
+    setAccountId(state, accountId){
+        state.accountID = accountId;
+    }
+}

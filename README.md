@@ -1,8 +1,8 @@
-# frontend
+# LOL Search Site frontend
 
 ## Project setup
 ```
-npm install
+npm install13123
 ```
 
 ### Compiles and hot-reloads for development
