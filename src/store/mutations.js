@@ -1,6 +1,6 @@
 export default {
     setUserRecord(state, userRecord){
-        state.userRecord = userRecord;
+        state.userRecords = userRecord;
     },
     setUserInfo(state, userInfo){
         state.userInfo = userInfo;

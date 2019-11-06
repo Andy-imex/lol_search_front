@@ -5,7 +5,7 @@
         <b-card-img :src="getTierImagePath" class="rounded-0" width=""></b-card-img>
       </b-col>
       <b-col md="7">
-        <b-card-body :title="getGameType" v-if="getTier">
+        <b-card-body :title="getGameType" v-if="getIsUnranked">
           <b-card-text class="userRecordText">
             <div class="tierName_Unranked">
               <span>Unranked</span>
@@ -64,7 +64,11 @@
 
         return gameTypeText[this.userData.queueType]
       },
-      getTier() {
+      /**
+       * 해당 모드의 게임을 했는지 안했는지 체크
+       * @returns {boolean}
+       */
+      getIsUnranked() {
         return this.userData.tier === "Unranked"
       }
     }

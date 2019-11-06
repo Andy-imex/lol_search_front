@@ -29,21 +29,27 @@
         this.$store.dispatch("userMatchDataIndexAction", 0);
         this.getUserInfo();
       },
+      /**
+       * 유저 정보 받아오는부분
+       */
       getUserInfo() {
         RiotApi().getUserInfoBySummonerName(this.searchValue)
             .then(res => {
               const store = this.$store;
-              if (typeof res.data.status != "undefined" && res.data.status.status_code === 404) return this.notSearchHandler()
               store.dispatch("userInfoSetAction", res.data);
-              this.getUserRecord(res.data.id);
-              this.getMatchListData(res.data.accountId, this.$store.state.matchDataIndex)
+              this.getUserRecord(res.data.id);   //유저의 정보를 받아와서 유저 아이디를 이용해 기록을 검색
+              this.getMatchListData(res.data.accountId, this.$store.state.matchDataIndex) //유저의 정보를 받아와서 유저의 accountId 와 matchDataIndex 를 이용해 matchList 검
             })
             .catch((e) => {
               this.errorHandler(e)
             })
       },
-      getUserRecord(accountId) {
-        RiotApi().getUserRecordByAccountId(accountId)
+      /**
+       * 유저의 기록을 받아오는부분
+       * @param summonerId 라이엇에서 만든 암호화된 SummonerID
+       */
+      getUserRecord(summonerId) {
+        RiotApi().getUserRecordByAccountId(summonerId)
             .then(res => {
               const store = this.$store;
               store.dispatch("userRecordSetAction", res.data);
@@ -52,6 +58,10 @@
               this.errorHandler(e)
             })
       },
+      /**
+       * match Id를 이용해 해당 게임 기록을 받아오는부
+       * @param matchId 매치 아이
+       */
       getMatchData(matchId) {
         RiotApi().getMatchDataByMatchId(matchId)
             .then(res => {
@@ -63,6 +73,11 @@
               this.errorHandler(e)
             })
       },
+      /**
+       * accountId 와 index를 이용해 매치리스트를 받아오는부
+       * @param accountId 암호화된 계정 id
+       * @param beginIndex 시작할 index
+       */
       getMatchListData(accountId, beginIndex) {
         const morePlusNum = this.$store.state.morePlusNum;
         RiotApi().getMatchListDataByAccountIdAndBeginIndexAndEndIndex(accountId, (beginIndex + morePlusNum), beginIndex)
@@ -75,13 +90,9 @@
               this.errorHandler(e)
             })
       },
-      notSearchHandler() {
-        this.$emit("complete", true);
-        alert("찾지 못하였습니다.");
-      },
       errorHandler(e) {
         this.$emit("complete", true);
-        alert(e.response.data.error_msg)
+        alert("검색하신 소환사가 없습니다.");
       }
 
     }

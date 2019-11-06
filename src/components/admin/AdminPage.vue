@@ -28,14 +28,16 @@
         :per-page="perPage"
         :total-rows="rows"
         aria-controls="table"
-        v-model="currentPage">
+        v-model="currentPage"
+    >
     </b-pagination>
 
     <warning-modal
         @yes="summonerDataDelete"
         contents="정말 삭제하시겠습니까?"
         ref="warningModal"
-        title="경고">
+        title="경고"
+    >
     </warning-modal>
     <LoadingOverlay
         ref="loadingOverlay"
@@ -54,6 +56,9 @@
     name: "AdminPage",
     components: {SummonerTable, WarningModal, AdminSearchBar, LoadingOverlay},
     created() {
+      /**
+       * backend 에서 데이터를 받아와서 내림차순으로 정렬
+       */
       BackendApi().getAllSummonerData()
           .then(res => {
             res.data.map(summoner => {
@@ -80,10 +85,14 @@
       }
     },
     methods: {
+      /**
+       * 서머너데이터 지우는부분
+       */
       summonerDataDelete() {
-        BackendApi().deleteSummonerDataByAccountId(this.selectdSummonerAccountId)
+        BackendApi().deleteSummonerDataByAccountId(this.selectedSummonerAccountId)
             .then(() => {
-              this.items = this.items.filter(item => item.accountId !== this.selectdSummonerAccountId);
+              this.items = this.items.filter(item => item.accountId !== this.selectedSummonerAccountId);
+
               this.$refs.warningModal.closeModal()
             })
             .catch(err => {
@@ -108,7 +117,7 @@
       },
       summonerDataNickNameUpdate() {
         const selectIndex = this.items.findIndex(item => item.accountId === this.selectdSummonerAccountId);
-        if (this.items[selectIndex].nickName.trim() === '') this.items[selectIndex].nickName = null
+        if (this.items[selectIndex].nickName.trim() === '') this.items[selectIndex].nickName = null;
         BackendApi().updateSummonerDataNickNameByAccount(this.selectdSummonerAccountId, this.items[selectIndex].nickName)
             .then(() => {
               this.items[selectIndex].isEdit = !this.items[selectIndex].isEdit;

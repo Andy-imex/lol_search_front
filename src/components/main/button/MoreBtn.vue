@@ -31,7 +31,7 @@
         this.isComplete = false;
         RiotApi().getMatchListDataByAccountIdAndBeginIndexAndEndIndex(store.userInfo.accountId, (store.matchDataIndex + store.morePlusNum), store.matchDataIndex)
             .then(res => {
-              for (let num in res.data.matches) this.getMatchData(res.data.matches[num].gameId)
+              for (let num in res.data.matches) this.getMatchData(res.data.matches[num].gameId);
               this.$store.dispatch("userMatchDataIndexAction", store.matchDataIndex + store.morePlusNum)
             })
             .catch(e => {

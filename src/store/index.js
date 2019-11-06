@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 const state = {
     userInfo:'',
-    userRecord:'',
+    userRecords:'',
     userMatchList:[],
     championData:'',
     spellData:'',

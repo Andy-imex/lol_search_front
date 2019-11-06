@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Main from './pages/Main'
-import Admin from './pages/Admin'
-import Login from "./pages/Login";
+import Main from './page/Main'
+import Admin from './page/Admin'
+import Login from "./page/Login";
 
 Vue.use(Router);
 

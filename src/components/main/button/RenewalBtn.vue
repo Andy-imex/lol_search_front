@@ -18,7 +18,7 @@
     props: ['summonerName'],
     data() {
       return {
-        isComplete:true
+        isComplete: true
       }
     },
     methods: {

@@ -76,6 +76,10 @@
     },
     props: ['matchData'],
     computed: {
+      /**
+       * 현재시간과 props로 받은 matchData의 게임만들어진 시간을 계산하여 해당하는 String 으로 반환한다
+       * @returns {string}
+       */
       getTimeStamp() {
         const elapsedTime = Math.floor((new Date().getTime() - this.matchData.gameCreation) / (1000 * 60 * 60));
         let resultTimeToKr;
@@ -83,12 +87,24 @@
         else resultTimeToKr = elapsedTime + "시간 전";
         return resultTimeToKr
       },
+      /**
+       * store에 저장되어있는 userInfo를 반환한
+       * @returns {string|*|((options: {encoding: "buffer"}) => UserInfo<Buffer>)|((options?: {encoding: string}) => UserInfo<string>)}
+       */
       getUserInfo() {
         return this.$store.state.userInfo
       },
+      /**
+       * props 로 받은 matchData의 gameId 를 반환한다
+       * * @returns {*}
+       */
       getGameId() {
         return this.matchData.gameId
       },
+      /**
+       * queueIdData에 있는 번호를 매칭하여 한글로 적힌 String 을 반환한
+       * @returns {*}
+       */
       getGameMode() {
         const queueIdData = {
           "420": "솔로랭크",
@@ -100,9 +116,12 @@
         return queueIdData[this.matchData.queueId]
       }
     },
+    /**
+     * 해당 컴포넌트가 만들어질떄 실행하는부분
+     */
     created() {
       this.teamClassification();
-      this.getUserMatchData()
+      this.setUserMatchData()
     },
     methods: {
       getChampionImagePath(championid) {
@@ -117,12 +136,20 @@
       getperkSubImagePath(perkNum) {
         return `//opgg-static.akamaized.net/images/lol/perkStyle/${perkNum}.png`
       },
+      /**
+       * 아이템 number 를 받아 이미지경로랑 합쳐 imagepath 를 반환해준다. itemNumber 가 0 이면 비어있는 이미지 경로를 반환한다
+       * @param itemNumber
+       * @returns {string}
+       */
       getItemImagePath(itemNumber) {
         let image_path;
-        if (itemNumber === 0) image_path = 'https://opgg-static.akamaized.net/images/pattern/opacity.1.png'
-        else image_path = `//opgg-static.akamaized.net/images/lol/item/${itemNumber}.png`
+        if (itemNumber === 0) image_path = 'https://opgg-static.akamaized.net/images/pattern/opacity.1.png';
+        else image_path = `//opgg-static.akamaized.net/images/lol/item/${itemNumber}.png`;
         return image_path
       },
+      /**
+       * matchdata 안의  해당 유저들의 teamID 를 찾아서 data team1, team2 에 분류해준다
+       */
       teamClassification() {
         let team1 = [];
         let team2 = [];
@@ -130,18 +157,17 @@
 
 
         for (let num in participants) {
-          if (participants[num].teamId === 100) {
-            participants[num].summonerName = this.matchData.participantIdentities[num].player.summonerName;
-            team1.push(participants[num])
-          } else {
-            participants[num].summonerName = this.matchData.participantIdentities[num].player.summonerName;
-            team2.push(participants[num])
-          }
+          participants[num].summonerName = this.matchData.participantIdentities[num].player.summonerName;
+          if (participants[num].teamId === 100) team1.push(participants[num])
+          else team2.push(participants[num])
         }
         this.team1 = team1;
         this.team2 = team2;
       },
-      getUserMatchData() {
+      /**
+       * 매치데이터중에 검색한 유저의 데이터를 순서를 찾아서 data userData 에 셋팅한다
+       */
+      setUserMatchData() {
         let currentUserNumber;
         for (let i = 0; i < this.matchData.participantIdentities.length; i++) {
           if (this.matchData.participantIdentities[i].player.accountId === this.$store.state.userInfo.accountId) {

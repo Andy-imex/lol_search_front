@@ -1,12 +1,10 @@
 <template>
   <b-modal :title="title" centered v-model="showModal">
-    <!-- 타이틀 -->
     <b-row>
       <b-col>{{ contents }}</b-col>
     </b-row>
 
     <div slot="modal-footer">
-      <!-- 예 버튼 -->
       <b-button
           :disabled="isLoading"
           @click="onYesClick"
@@ -16,7 +14,6 @@
         <b-spinner small v-show="isLoading"/>
       </b-button>
 
-      <!-- 아니오 버튼 -->
       <b-button @click="onNoClick" variant="outline-warning">취소</b-button>
     </div>
   </b-modal>

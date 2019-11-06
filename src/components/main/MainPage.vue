@@ -30,6 +30,7 @@
                          v-for="match in this.$store.state.userMatchList"
               />
               <more-btn
+                  v-if="this.$store.state.userMatchList.length > 4"
               />
             </div>
           </b-col>
@@ -70,6 +71,10 @@
       LoadingOverlay
     },
     computed: {
+      /**
+       *  queueType이 존재하면 한글로반환하고 존재안하면 Unranked(게임 안한사람) 를 반환하는부분
+       * * @returns {[]}
+       */
       queueTypeSort() {
         const queueTypeArray = ["RANKED_SOLO_5x5", "RANKED_FLEX_SR", "RANKED_TFT"];
         const storeInUserRecord = this.$store.state.userRecords;
@@ -87,6 +92,9 @@
       }
     },
     methods: {
+      /**
+       * 공식api 에서 챔피언데이터를 받아와서 store 에 저장하는부분
+       */
       getChampionData() {
         RiotDataApi().getChampionData()
             .then(res => {
@@ -99,6 +107,9 @@
               alert(e + "에러가 발생하였습니다.")
             })
       },
+      /**
+       * 공식api 에서 서머너 스펠 데이터를 받아와서 store 에 저장하는부분
+       */
       getSpellData() {
         RiotDataApi().getSpellData()
             .then(res => {
@@ -119,7 +130,6 @@
         if (isOn) this.$refs.loadingOverlay.open();
         else this.$refs.loadingOverlay.close()
       }
-
     },
     mounted() {
       this.getChampionData();
@@ -137,7 +147,6 @@
 <style scoped>
   .userInfoContainer {
     margin-bottom: 15px;
-    border: 1px solid #ddd;
     padding: 15px;
   }
 
@@ -145,7 +154,4 @@
     margin-bottom: 15px;
   }
 
-  .userRecordContainer .col {
-    padding-left: 0;
-  }
 </style>
